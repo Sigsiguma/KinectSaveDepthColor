@@ -274,7 +274,8 @@ inline void Kinect::saveColor() {
 // Save Depth
 inline void Kinect::saveDepth() {
 	static int count = 0;
-	std::string fileName = "depth" + std::to_string(count) + ".png";
-	cv::imwrite(fileName, depthMat);
+	std::string fileName = "depth" + std::to_string(count) + ".yml";
+	cv::FileStorage fs(fileName, cv::FileStorage::WRITE);
+	fs << "depth_buffer" << depthMat;
 	++count;
 }
