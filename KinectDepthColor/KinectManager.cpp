@@ -6,8 +6,6 @@
 
 #include <ppl.h>
 
-#include <yaml-cpp/yaml.h>
-
 // Choose Resolution
 #define COLOR
 //#define DEPTH
