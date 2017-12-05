@@ -34,6 +34,7 @@ private:
 	int depthHeight;
 	unsigned int depthBytesPerPixel;
 
+	bool isSave;
 public:
 	// Constructor
 	Kinect();

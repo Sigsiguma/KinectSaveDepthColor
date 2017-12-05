@@ -33,8 +33,17 @@ void Kinect::run()
 	// Draw Data
 	draw();
 
+	std::cout << isSave << std::endl;
+
 	// Save Data
-	save();
+	if (isSave) {
+		save();
+	}
+	else {
+		cv::namedWindow("Window");
+		cv::waitKey(0);
+		isSave = true;
+	}
 }
 
 // Initialize
@@ -51,6 +60,7 @@ void Kinect::initialize()
 	// Initialize Depth
 	initializeDepth();
 
+	isSave = false;
 
 	// Wait a Few Seconds until begins to Retrieve Data from Sensor ( about 2000-[ms] )
 	std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -266,7 +276,7 @@ void Kinect::save() {
 // Save Color
 inline void Kinect::saveColor() {
 	static int count = 0;
-	std::string fileName = "color" + std::to_string(count) + ".png";
+	std::string fileName = "./save/color/color" + std::to_string(count) + ".png";
 	cv::imwrite(fileName, colorMat);
 	++count;
 }
@@ -274,7 +284,7 @@ inline void Kinect::saveColor() {
 // Save Depth
 inline void Kinect::saveDepth() {
 	static int count = 0;
-	std::string fileName = "depth" + std::to_string(count) + ".yml";
+	std::string fileName = "./save/depth/depth" + std::to_string(count) + ".yml";
 	cv::FileStorage fs(fileName, cv::FileStorage::WRITE);
 	fs << "depth_buffer" << depthMat;
 	++count;
