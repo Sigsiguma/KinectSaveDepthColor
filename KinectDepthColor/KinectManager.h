@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <Kinect.h>
 #include <vector>
+#include <chrono>
 #include <wrl/client.h>
 
 #include "include.hpp"
@@ -35,6 +36,10 @@ private:
 	unsigned int depthBytesPerPixel;
 
 	bool isSave;
+	std::chrono::time_point<std::chrono::system_clock> startTime_;
+	int frameCount_;
+
+	static const int FPS = 10;
 public:
 	// Constructor
 	Kinect();

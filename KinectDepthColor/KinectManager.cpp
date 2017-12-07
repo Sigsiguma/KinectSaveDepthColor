@@ -7,8 +7,8 @@
 #include <ppl.h>
 
 // Choose Resolution
-#define COLOR
-//#define DEPTH
+// #define COLOR
+#define DEPTH
 
 // Constructor
 Kinect::Kinect()
@@ -33,7 +33,6 @@ void Kinect::run()
 	// Draw Data
 	draw();
 
-	std::cout << isSave << std::endl;
 
 	// Save Data
 	if (isSave) {
@@ -44,8 +43,15 @@ void Kinect::run()
 		cv::waitKey(0);
 		isSave = true;
 	}
-}
 
+	auto end = std::chrono::system_clock::now();
+	auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(end - startTime_).count();
+	int waitTime = frameCount_ * 1000 / FPS - msec;
+	if (waitTime > 0) {
+		Sleep(waitTime);
+	}
+
+}
 // Initialize
 void Kinect::initialize()
 {
@@ -61,6 +67,7 @@ void Kinect::initialize()
 	initializeDepth();
 
 	isSave = false;
+	frameCount_ = 0;
 
 	// Wait a Few Seconds until begins to Retrieve Data from Sensor ( about 2000-[ms] )
 	std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -137,6 +144,20 @@ void Kinect::finalize()
 // Update Data
 void Kinect::update()
 {
+	if (frameCount_ == 0) {
+		startTime_ = std::chrono::system_clock::now();
+	}
+
+	if (frameCount_ == FPS) {
+		auto time = std::chrono::system_clock::now();
+		auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(time - startTime_).count();
+		float fps = 1000.f / (msec / (float)FPS);
+		std::cout << fps << std::endl;
+		frameCount_ = 0;
+		startTime_ = time;
+	}
+	++frameCount_;
+
 	// Update Color
 	updateColor();
 
